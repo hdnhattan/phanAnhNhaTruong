@@ -65,21 +65,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child:
                       Stack(alignment: AlignmentDirectional(0, -1), children: [
                     Align(
-                      alignment: AlignmentDirectional(0, -1),
-                      child: idemail == "admin@gmail.com"
-                          ? Image.network(
-                              "https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/341545871_234721855771192_1011689951864723698_n.png?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=Ar0SOsz1fssAX9pAdBu&_nc_ht=scontent.fdad3-4.fna&oh=00_AfC088zNsXHRftjtEEovxfn5bhBDXeCTk_Y7ilCQ3qdlSg&oe=6469396F",
-                              width: double.infinity,
-                              height: 500,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.network(
-                              "https://vietnamitx.com/attachments/top-hinh-nen-dong-wallpaper-engine-desktop-tuyet-dep-download-chon-loc-2021-jpg.2215/",
-                              width: double.infinity,
-                              height: 500,
-                              fit: BoxFit.cover,
-                            ),
-                    ),
+                        alignment: AlignmentDirectional(0, -1),
+                        child: Image.asset(
+                          "assets/logo_dhkhh.png",
+                          width: double.infinity,
+                          height: 500,
+                          fit: BoxFit.cover,
+                        )),
                     Align(
                       alignment: AlignmentDirectional(0, -0.87),
                       child: Padding(

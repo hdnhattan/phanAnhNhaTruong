@@ -16,6 +16,7 @@ import 'package:shop_giay/src/feutures/core/screen/reflect/accept_reflect/accrpt
 import 'package:shop_giay/src/feutures/core/screen/reflect/list_image.dart';
 import 'package:shop_giay/src/feutures/core/screen/reflect/list_video.dart';
 import 'package:shop_giay/src/feutures/core/screen/reflect/video_reflect/video_player.dart';
+import 'package:shop_giay/src/feutures/core/screen/widget/icon_and_text.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:intl/intl.dart';
 
@@ -73,8 +74,9 @@ class _ReflectDetailPageState extends State<ReflectDetailPage>
         });
         return comments.length == 0
             ? Center(
-                child:
-                    SizedBox(height: 30, child: Text("Chưa có bình luận...")),
+                child: SizedBox(
+                    height: 30,
+                    child: Center(child: Text("Chưa có bình luận..."))),
               )
             : Container(
                 child: Column(
@@ -104,7 +106,10 @@ class _ReflectDetailPageState extends State<ReflectDetailPage>
               Navigator.pop(context);
             },
             icon: Icon(LineAwesomeIcons.angle_left)),
-        title: Text("Chi tiết phản ánh"),
+        title: Text(
+          "Chi tiết phản ánh",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: FutureBuilder(
@@ -142,20 +147,14 @@ class _ReflectDetailPageState extends State<ReflectDetailPage>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                                // mainAxisAlignment:
-                                //     MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  // Image.asset(Res.ic_menu_detail_reflect, width: 15, height: 15),
-                                  Icon(Icons.menu),
-                                  Container(
-                                      margin: EdgeInsets.only(left: 7),
-                                      child: Text(
-                                        widget.reflect.category!,
-                                        style: TextStyle(
-                                            fontSize: 18, color: Colors.green),
-                                      )),
-                                  SizedBox(
-                                    width: 160,
+                                  iconAndText(
+                                    textStyle: TextStyle(
+                                        fontSize: 18, color: Colors.green),
+                                    title: widget.reflect.category!,
+                                    icon: Icons.menu,
                                   ),
                                   widget.reflect.handle == 1
                                       ? Text("Chưa xử lý",
@@ -163,7 +162,7 @@ class _ReflectDetailPageState extends State<ReflectDetailPage>
                                               fontSize: 18,
                                               color: Colors.yellow))
                                       : widget.reflect.handle == 2
-                                          ? Text("Đã duyệt",
+                                          ? Text("",
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.green))
@@ -242,7 +241,8 @@ class _ReflectDetailPageState extends State<ReflectDetailPage>
                               height: 10,
                             ),
 
-                            widget.reflect.handle == 2
+                            widget.reflect.handle == 2 ||
+                                    widget.reflect.handle == 3
                                 ? Container(
                                     width: MediaQuery.of(context).size.width,
                                     // height: 200,
@@ -273,6 +273,9 @@ class _ReflectDetailPageState extends State<ReflectDetailPage>
                                                       .content_feed_back ??
                                                   "Nhà trường đã tiếp nhận phản ánh này, và sẽ sớm đưa ra biện pháp xử lý kịp thời.",
                                               style: TextStyle(fontSize: 16)),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -342,7 +345,12 @@ class _ReflectDetailPageState extends State<ReflectDetailPage>
                                 child: OutlinedButton(
                                     onPressed: () =>
                                         addComment(widget.reflect.id!),
-                                    child: Text("Gửi")),
+                                    child: Image.asset(
+                                      "assets/send_start_icon.png",
+                                      color: Colors.white,
+                                      height: 20,
+                                      width: 20,
+                                    )),
                               ),
                             )
                           : SizedBox();
@@ -590,24 +598,21 @@ class Comment extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: Colors.lightBlue),
-            child: Icon(Icons.person),
-          ),
-          title: Container(
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("$emailuser"),
-                Text(
-                  "${comment}",
-                ),
-              ],
+              borderRadius: BorderRadius.circular(100),
             ),
+            child: Image.asset("assets/person_icon.png"),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "$emailuser",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "${comment}",
+              ),
+            ],
           ),
           subtitle: Text(
             "${timeago.format(timestamp!.toDate())}",

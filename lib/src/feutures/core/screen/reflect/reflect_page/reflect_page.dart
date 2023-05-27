@@ -45,8 +45,8 @@ class _ReflectPageState extends State<ReflectPage> {
 
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Chưa xử lý'),
-    Tab(text: 'Tiếp nhận'),
-    Tab(text: 'Không tiếp nhận'),
+    Tab(text: 'Đã duyệt'),
+    Tab(text: 'Không duyệt'),
   ];
 
   @override
@@ -116,6 +116,26 @@ class ProfileMenuWidget extends StatelessWidget {
               ),
             )
           : null,
+    );
+  }
+}
+
+class TextCus extends StatelessWidget {
+  String title;
+
+  TextStyle? textStyle;
+
+  TextCus({
+    Key? key,
+    required this.title,
+    this.textStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: textStyle,
     );
   }
 }

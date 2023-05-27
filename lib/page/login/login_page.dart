@@ -81,12 +81,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   DefaultTabController(
                     length: 2,
                     child: SizedBox(
-                      height: 550,
+                      height: 570,
                       child: Column(
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 80, right: 80, bottom: 20),
+                                left: 20, right: 20, bottom: 20),
                             child: TabBar(
                               labelColor: Colors.green,
                               indicatorColor: Colors.blue,
@@ -250,18 +250,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                           onPressed: () async {
                                             if (emailController.text == null ||
                                                 emailController.text == "") {
-                                              // ScaffoldMessenger.of(context)
-                                              //     .showSnackBar(MySnackBars
-                                              //         .failureSnackBar);
-
-                                              // AnimatedSnackBar.rectangle(
-
-                                              //   'Success',
-                                              //   'This is a success snack bar',
-                                              //   type: AnimatedSnackBarType
-                                              //       .success,
-                                              //   brightness: Brightness.dark,
-                                              // ).show(context);
                                               AnimatedSnackBar.material(
                                                 'Chưa nhập email!',
                                                 type:

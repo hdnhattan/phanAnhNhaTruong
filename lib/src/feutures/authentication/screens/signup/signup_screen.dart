@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -14,6 +15,7 @@ class SignUpFormWidget extends StatelessWidget {
     final controller = Get.put(SignUpController());
     String levelUser = "user";
     bool _passwordVisible = false;
+    // TextEditingController repass = TextEditingController();
 
     final _fromKey = GlobalKey<FormState>();
     return Container(
@@ -109,11 +111,7 @@ class SignUpFormWidget extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          // TextFormField(
-          //   controller: controller.phoneNo,
-          //   decoration: InputDecoration(
-          //       label: Text("Phone"), prefixIcon: Icon(Icons.numbers)),
-          // ),
+
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
             child: TextFormField(
@@ -155,11 +153,7 @@ class SignUpFormWidget extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          // TextFormField(
-          //   controller: controller.password,
-          //   decoration: InputDecoration(
-          //       label: Text("Pass"), prefixIcon: Icon(Icons.fingerprint)),
-          // ),
+
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
             child: TextFormField(
@@ -204,7 +198,7 @@ class SignUpFormWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
             child: TextFormField(
-              // controller: controller.password,
+              controller: controller.repass,
               obscureText: false,
               decoration: InputDecoration(
                 suffixIcon: Icon(Icons.lock),
@@ -242,27 +236,6 @@ class SignUpFormWidget extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          // SizedBox(
-          //   width: double.infinity,
-          //   child: ElevatedButton(
-          //       onPressed: () {
-          //         if (_fromKey.currentState!.validate()) {
-          //           SignUpController.instance.registerUser(
-          //               controller.email.text.trim(),
-          //               controller.password.text.trim());
-          //           final user = UserModel(
-          //             fullName: controller.fullName.text.trim(),
-          //             email: controller.email.text.trim(),
-          //             phoneNo: controller.phoneNo.text.trim(),
-          //             password: controller.password.text.trim(),
-          //             level: levelUser,
-          //           );
-
-          //           SignUpController.instance.createUser(user);
-          //         }
-          //       },
-          //       child: Text("DANG KY")),
-          // )
 
           SizedBox(
             height: 20,
@@ -279,18 +252,56 @@ class SignUpFormWidget extends StatelessWidget {
                     MediaQuery.of(context).size.width / 2.5, 50), //////// HERE
               ),
               onPressed: () async {
-                SignUpController.instance.registerUser(
-                    controller.email.text.trim(),
-                    controller.password.text.trim());
-                final user = UserModel(
-                  fullName: controller.fullName.text.trim(),
-                  email: controller.email.text.trim(),
-                  phoneNo: controller.phoneNo.text.trim(),
-                  password: controller.password.text.trim(),
-                  level: levelUser,
-                );
+                if (controller.email.text.trim() == null ||
+                    controller.email.text.trim() == "") {
+                  AnimatedSnackBar.material(
+                    'Chưa nhập email!',
+                    type: AnimatedSnackBarType.error,
+                    mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+                  ).show(context);
+                  print("not login");
+                } else if (controller.password.text.trim() == null ||
+                    controller.password.text.trim() == "") {
+                  AnimatedSnackBar.material(
+                    'Chưa nhập mật khẩu!',
+                    type: AnimatedSnackBarType.error,
+                    mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+                  ).show(context);
+                } else if (controller.repass.text !=
+                        controller.password.text.trim() ||
+                    controller.repass.text == "") {
+                  AnimatedSnackBar.material(
+                    'Nhập lại mật khẩu không chính xác',
+                    type: AnimatedSnackBarType.error,
+                    mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+                  ).show(context);
+                } else {
+                  SignUpController.instance.registerUser(
+                      controller.email.text.trim(),
+                      controller.password.text.trim());
+                  final user = UserModel(
+                    fullName: controller.fullName.text.trim(),
+                    email: controller.email.text.trim(),
+                    phoneNo: controller.phoneNo.text.trim(),
+                    password: controller.password.text.trim(),
+                    level: levelUser,
+                  );
 
-                await SignUpController.instance.createUser(user);
+                  await SignUpController.instance
+                      .createUser(user)
+                      .then((value) {
+                    AnimatedSnackBar.material(
+                      'Đăng ký thành công',
+                      type: AnimatedSnackBarType.success,
+                      mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+                    ).show(context);
+                    controller.fullName.text = "";
+                    controller.email.text = "";
+                    controller.phoneNo.text = "";
+                    controller.password.text = "";
+                    controller.repass.text = "";
+                  });
+                }
               },
               child: Text(
                 "ĐĂNG KÝ",

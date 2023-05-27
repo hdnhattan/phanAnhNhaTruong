@@ -7,8 +7,6 @@ import 'package:shop_giay/constants/ui_constants.dart';
 import 'package:shop_giay/global/global.dart';
 import 'package:shop_giay/page/cretae_reflect/create_reflect.dart';
 
-
-
 import 'package:shop_giay/src/feutures/core/models/reflect_model.dart';
 import 'package:shop_giay/src/feutures/core/screen/profile/profile_screen.dart';
 import 'package:shop_giay/theme/pallete.dart';
@@ -57,12 +55,13 @@ class _HomePageState extends State<HomePage> {
                   setState(() {});
                 });
               },
-              child: Icon(
-                Icons.add,
-                color: Pallete.whiteColor,
-                size: 28,
-              ),
-            )
+              child: Image.asset(
+                "assets/tweet_icon.png",
+                fit: BoxFit.cover,
+                width: 50,
+                height: 50,
+                color: Colors.white,
+              ))
           : SizedBox(),
       body: IndexedStack(
         index: _page,

@@ -535,23 +535,7 @@ class _AcceptReflectPageState extends State<AcceptReflectPage> {
                             },
                           );
 
-                          // ReflectController.updateRef(ReflectModel(
-                          //   content_feed_back: _content_feed_back!.text,
-                          //         id: widget.reflect.id,
-                          //         email: widget.reflect.email,
-                          //         title: _title!.text,
-                          //         category: _category!.text,
-                          //         content: _content!.text,
-                          //         address: _address!.text,
-                          //         image: widget.reflect.image,
-                          //         video: widget.reflect.video,
-                          //         accept: false,
-                          //         handle: 1,
-                          //         createdAt: widget.reflect.createdAt,
-                          //         likes: widget.reflect.likes))
-                          //     .then((value) {
-                          //   Navigator.pop(context);
-                          // });
+                         
                         },
                         child: Text(
                           "Tiếp nhận phản ánh",
@@ -572,13 +556,7 @@ class _AcceptReflectPageState extends State<AcceptReflectPage> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red),
                         onPressed: () async {
-                          // final userData = UserModel(
-                          //     fullName: fullName.text.trim(),
-                          //     email: email.text.trim(),
-                          //     phoneNo: phoneNo.text.trim(),
-                          //     password: password.text.trim());
-                          // await controller.updateRecord(user);
-
+                         
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {

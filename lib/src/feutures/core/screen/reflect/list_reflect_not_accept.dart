@@ -1,8 +1,11 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:shop_giay/global/global.dart';
@@ -10,8 +13,10 @@ import 'package:shop_giay/src/feutures/authentication/model/user_model.dart';
 import 'package:shop_giay/src/feutures/core/controllers/profile_controller.dart';
 import 'package:shop_giay/src/feutures/core/controllers/reflect_controller.dart';
 import 'package:shop_giay/src/feutures/core/models/reflect_model.dart';
+import 'package:shop_giay/src/feutures/core/screen/reflect/reflect_all_home/all_reflect_home.dart';
 import 'package:shop_giay/src/feutures/core/screen/reflect/reflect_detail_page.dart';
 import 'package:shop_giay/src/feutures/core/screen/profile/update_profile_screen.dart';
+import 'package:shop_giay/src/feutures/core/screen/widget/icon_and_text.dart';
 import 'package:shop_giay/src/utils/file_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -43,6 +48,14 @@ class _ListReflectNotAcceptState extends State<ListReflectNotAccept> {
   //     }
   //   });
   // }
+  void delete(String id) {
+    FirebaseFirestore.instance.collection("Reflect").doc(id).delete();
+    AnimatedSnackBar.material(
+      'Xóa phản ánh thành công!',
+      type: AnimatedSnackBarType.success,
+      mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+    ).show(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,122 +92,171 @@ class _ListReflectNotAcceptState extends State<ListReflectNotAccept> {
                       DateTime date = DateTime.parse(
                           snapshot.data![index].createdAt!.toDate().toString());
                       String formatedDate = DateFormat.yMd().format(date);
+                      String file =
+                          getFileName("${snapshot.data?[index].media?[0]}");
                       return Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ReflectDetailPage(
-                                        reflect: snapshot.data![index],
-                                      )),
-                            ).then((value) {
-                              setState(() {});
-                            });
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        child: Slidable(
+                          endActionPane: ActionPane(
+                            extentRatio: 0.25,
+                            motion: ScrollMotion(),
                             children: [
-                              Container(
-                                width: 100,
-                                height: 106,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFEEEEEE),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: Image.network(
-                                      "${snapshot.data![index].media![0]}",
-                                    ).image,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: Color(0xFF656565),
-                                    width: 0.5,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: 260,
-                                height: 106,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF656565),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 6,
-                                      color: Color(0x34000000),
-                                      offset: Offset(0, 3),
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          12, 8, 0, 0),
-                                      child: Text(
-                                        '${snapshot.data![index].title}',
-                                        textAlign: TextAlign.start,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          12, 5, 0, 0),
-                                      child: SizedBox(
-                                        height: 50,
-                                        child: Text(
-                                          '${snapshot.data![index].content}',
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          12, 5, 0, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Icon(
-                                            Icons.remove_red_eye,
-                                            size: 12,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    5, 0, 0, 0),
-                                            child: Text(formatedDate),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    8, 0, 0, 0),
-                                            child: Icon(
-                                              Icons.calendar_month,
-                                              size: 12,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    5, 0, 0, 0),
-                                            child: Text(
-                                              '${snapshot.data![index].category}',
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              SlidableAction(
+                                onPressed: (context) async {
+                                  delete(snapshot.data![index].id!);
+                                  setState(() {});
+                                },
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'DELETE',
                               ),
                             ],
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ReflectDetailPage(
+                                          reflect: snapshot.data![index],
+                                        )),
+                              ).then((value) {
+                                setState(() {});
+                              });
+                            },
+                            child: Container(
+                              // width: 260,
+                              height: 106,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF656565),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 6,
+                                    color: Color(0x34000000),
+                                    offset: Offset(0, 3),
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  isImageFromPath(file.split('.').last)
+                                      ? Container(
+                                          width: 100,
+                                          height: 106,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFEEEEEE),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: Image.network(
+                                                "${snapshot.data![index].media![0]}",
+                                              ).image,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              color: Color(0xFF656565),
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        )
+                                      : Center(
+                                          child: Container(
+                                            width: 100,
+                                            height: 106,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFFEEEEEE),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Center(
+                                              child: Image.asset(
+                                                "assets/video.png",
+                                                height: 30,
+                                                width: 30,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                  Column(
+                                    // mainAxisSize: MainAxisSize.max,
+                                    // crossAxisAlignment:
+                                    //     CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            12, 8, 0, 0),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.7,
+                                          child: Text(
+                                            '${snapshot.data![index].title}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
+                                            textAlign: TextAlign.start,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            12, 5, 0, 0),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.7,
+                                          height: 50,
+                                          child: Text(
+                                            '${snapshot.data![index].content}',
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            12, 0, 12, 0),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.7,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            // mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              iconAndText(
+                                                  textStyle:
+                                                      TextStyle(fontSize: 12),
+                                                  size: 12,
+                                                  title:
+                                                      '${snapshot.data![index].category}',
+                                                  icon: LineAwesomeIcons
+                                                      .bookmark),
+                                              iconAndText(
+                                                  textStyle:
+                                                      TextStyle(fontSize: 12),
+                                                  size: 12,
+                                                  title: formatedDate,
+                                                  icon: Icons.calendar_month),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       );

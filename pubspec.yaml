@@ -73,6 +73,7 @@ dependencies:
   animated_snack_bar: ^0.3.1
   flutter_slidable: ^3.0.0
   flutter_easyloading: ^3.0.5
+  
 
 
 
@@ -99,9 +100,22 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/tweet_icon.png
+    - assets/send_start_icon.png
+    - assets/person_icon.png
+    - assets/post_share_icon.png
+    - assets/logo_dhkhh.png
+    - assets/banner.jpg
+    - assets/banner1.jpg
+    - assets/video.png
+
+
+
+
+
+    
+   
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

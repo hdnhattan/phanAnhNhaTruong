@@ -547,7 +547,7 @@ class CreateReflectPageState extends State<CreateReflectPage> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: SizedBox(
                                         height: 100,
-                                        width: 250,
+                                        width: 220,
                                         child: ListView.separated(
                                           itemCount: listFile.length,
                                           separatorBuilder: (context, index) =>
